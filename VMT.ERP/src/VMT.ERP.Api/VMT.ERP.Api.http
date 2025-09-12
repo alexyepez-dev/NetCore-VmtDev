@@ -1,0 +1,6 @@
+@VMT.ERP.Api_HostAddress = http://localhost:5172
+
+GET {{VMT.ERP.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
