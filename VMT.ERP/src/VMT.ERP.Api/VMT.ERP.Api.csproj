@@ -22,13 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\VMT.ERP.Application\VMT.ERP.Application.csproj" />
     <ProjectReference Include="..\VMT.ERP.Persistence\VMT.ERP.Persistence.csproj" />
     <ProjectReference Include="..\VMT.ERP.Utils\VMT.ERP.Utils.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\Exception\" />
-    <Folder Include="Controllers\Users\" />
   </ItemGroup>
 
 </Project>

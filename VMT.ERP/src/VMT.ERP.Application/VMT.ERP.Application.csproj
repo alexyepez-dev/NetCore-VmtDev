@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Bll\" />
-    <Folder Include="Extension\" />
+    <ProjectReference Include="..\VMT.ERP.Common\VMT.ERP.Common.csproj" />
+    <ProjectReference Include="..\VMT.ERP.Domain\VMT.ERP.Domain.csproj" />
+    <ProjectReference Include="..\VMT.ERP.Persistence\VMT.ERP.Persistence.csproj" />
+    <ProjectReference Include="..\VMT.ERP.Utils\VMT.ERP.Utils.csproj" />
   </ItemGroup>
 
 </Project>
