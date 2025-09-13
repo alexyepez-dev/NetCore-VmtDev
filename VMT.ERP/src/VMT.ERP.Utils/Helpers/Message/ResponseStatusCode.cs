@@ -13,5 +13,8 @@
 
         public const int InternalError = 500;
         public const string InternalErrorMessage = "Internal Error";
+
+        public const int TooManyRequests = 429;
+        public const string TooManyRequestsMessage = "TooManyRequests";
     }
 }

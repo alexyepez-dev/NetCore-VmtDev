@@ -16,28 +16,43 @@ namespace VMT.ERP.Application.Bll.User
         {
             try
             {
-                if (context is null)
+                var statusCodeBadRequest = ResponseStatusCode.BadRequest;
+                var statusCodeBadRequestMessage = ResponseStatusCode.BadRequestMessage;
+                var contextMessageBadRequest = ResponseMessage.ErrorBadRequest;
+
+                var statusCodeNotFound = ResponseStatusCode.NotFound;
+                var statusCodeNotFoundMessage = ResponseStatusCode.NotFoundMessage;
+                var contextMessageNotFound = ResponseMessage.listOfUsersFailed;
+
+                var statusCodeOk = ResponseStatusCode.Ok;
+                var statusCodeMessage = ResponseStatusCode.OkMessage;
+                var contextMessageOk = ResponseMessage.listOfUsersSuccess;
+
+                var expressionToValidateContextNull = context is null;
+
+                if (expressionToValidateContextNull)
                 {
                     return new ApiResponse<List<Usuario>>
                         (
                         false,
-                        ResponseStatusCode.BadRequest,
-                        ResponseStatusCode.BadRequestMessage,
-                        ResponseMessage.ErrorBadRequest,
+                        statusCodeBadRequest,
+                        statusCodeBadRequestMessage,
+                        contextMessageBadRequest,
                         null!
                         );
                 }
 
-                var listOfUsers = await context.Usuarios.ToListAsync();
+                var listOfUsers = await context!.Usuarios.ToListAsync();
+                var expressionToValidateNotFound = listOfUsers is null || listOfUsers.Count == 0;
 
-                if (listOfUsers is null || listOfUsers.Count == 0)
+                if (expressionToValidateNotFound)
                 {
                     return new ApiResponse<List<Usuario>>
                         (
                         false,
-                        ResponseStatusCode.NotFound,
-                        ResponseStatusCode.NotFoundMessage,
-                        ResponseMessage.listOfUsersFailed,
+                        statusCodeNotFound,
+                        statusCodeNotFoundMessage,
+                        contextMessageNotFound,
                         null!
                         );
                 }
@@ -45,20 +60,24 @@ namespace VMT.ERP.Application.Bll.User
                 return new ApiResponse<List<Usuario>>
                     (
                     true,
-                    ResponseStatusCode.Ok,
-                    ResponseStatusCode.OkMessage,
-                    ResponseMessage.listOfUsersSuccess,
-                    listOfUsers
+                    statusCodeOk,
+                    statusCodeMessage,
+                    contextMessageOk,
+                    listOfUsers!
                     );
             }
             catch (Exception error)
             {
+                var statusCodeInternalError = ResponseStatusCode.InternalError;
+                var statusCodeInternalErrorMessage = ResponseStatusCode.NotFoundMessage;
+                var contextMessageInternalError = ResponseMessage.listOfUsersFailed;
+
                 return new ApiResponse<List<Usuario>>
                     (
                     false,
-                    ResponseStatusCode.InternalError,
-                    ResponseStatusCode.InternalErrorMessage,
-                    $"Error: {error} | Unexpected error: {ResponseMessage.ErrorInternalServer}",
+                    statusCodeInternalError,
+                    statusCodeInternalErrorMessage,
+                    $"Error: {error} | Unexpected error: {contextMessageInternalError}",
                     null!
                     );
             }

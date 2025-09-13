@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using VMT.ERP.Application.Interfaces.User;
 using VMT.ERP.Domain.Entities;
 using VMT.ERP.Utils.Exception;
@@ -9,6 +10,7 @@ namespace VMT.ERP.Api.Controllers.Users
 {
     [Route("api/v1/user")]
     [ApiController]
+    [EnableRateLimiting("fixed")]
     [TypeFilter(typeof(ExceptionManager))]
     public class UserController : ControllerBase
     {

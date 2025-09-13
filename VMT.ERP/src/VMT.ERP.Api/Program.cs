@@ -1,19 +1,12 @@
-using VMT.ERP.Application.Extension;
-using VMT.ERP.Persistence.Extension;
-using VMT.ERP.Utils.Exception;
+using VMT.ERP.Api.Extension;
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddControllers(
-    options => 
-    options.Filters.Add(typeof(ExceptionManager)));
-
-builder.Services
-    .AddApplication()
-    .AddPersistence(builder.Configuration);
+builder.Services.AddServices(config);
 
 var app = builder.Build();
 
