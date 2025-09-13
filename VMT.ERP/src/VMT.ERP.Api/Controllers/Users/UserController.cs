@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.RateLimiting;
 using VMT.ERP.Application.Interfaces.User;
 using VMT.ERP.Domain.Entities;
-using VMT.ERP.Utils.Exception;
+using VMT.ERP.Utils.Exceptions;
 using VMT.ERP.Utils.GetResponse;
 using VMT.ERP.Utils.Helpers.Api;
 

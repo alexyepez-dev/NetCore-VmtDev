@@ -1,7 +1,7 @@
 ﻿using VMT.ERP.Api.Configuration.RateLimiting;
 using VMT.ERP.Application.Extension;
 using VMT.ERP.Persistence.Extension;
-using VMT.ERP.Utils.Exception;
+using VMT.ERP.Utils.Exceptions;
 
 namespace VMT.ERP.Api.Extension
 {

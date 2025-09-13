@@ -4,7 +4,7 @@ using System.Net;
 using VMT.ERP.Utils.Helpers.Api;
 using VMT.ERP.Utils.Helpers.Message;
 
-namespace VMT.ERP.Utils.Exception
+namespace VMT.ERP.Utils.Exceptions
 {
     public class ExceptionManager : IExceptionFilter
     {
