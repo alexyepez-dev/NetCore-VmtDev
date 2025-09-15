@@ -3,8 +3,8 @@ using VMT.ERP.Application.Interfaces.User;
 using VMT.ERP.Common.Helpers.Message;
 using VMT.ERP.Domain.Entities;
 using VMT.ERP.Persistence.Database;
+using VMT.ERP.Utils.GetResponse;
 using VMT.ERP.Utils.Helpers.Api;
-using VMT.ERP.Utils.Helpers.Message;
 
 namespace VMT.ERP.Application.Bll.User
 {
@@ -16,70 +16,30 @@ namespace VMT.ERP.Application.Bll.User
         {
             try
             {
-                var statusCodeBadRequest = ResponseStatusCode.BadRequest;
-                var statusCodeBadRequestMessage = ResponseStatusCode.BadRequestMessage;
-                var contextMessageBadRequest = ResponseMessage.ErrorBadRequest;
-
-                var statusCodeNotFound = ResponseStatusCode.NotFound;
-                var statusCodeNotFoundMessage = ResponseStatusCode.NotFoundMessage;
-                var contextMessageNotFound = ResponseMessage.listOfUsersFailed;
-
-                var statusCodeOk = ResponseStatusCode.Ok;
-                var statusCodeMessage = ResponseStatusCode.OkMessage;
-                var contextMessageOk = ResponseMessage.listOfUsersSuccess;
-
-                var expressionToValidateContextNull = context is null;
-
-                if (expressionToValidateContextNull)
-                {
-                    return new ApiResponse<List<Usuario>>
-                        (
-                        false,
-                        statusCodeBadRequest,
-                        statusCodeBadRequestMessage,
-                        contextMessageBadRequest,
-                        null!
-                        );
-                }
+                var listOfUsersBadRequest = ResponseMessage.ErrorBadRequest;
+                var listOfUsersMessageNotFound = ResponseMessage.listOfUsersFailed;
+                var listOfUsersMessageOk = ResponseMessage.listOfUsersSuccess;
 
                 var listOfUsers = await context!.Usuarios.ToListAsync();
-                var expressionToValidateNotFound = listOfUsers is null || listOfUsers.Count == 0;
 
-                if (expressionToValidateNotFound)
+
+                if (context is null)
                 {
-                    return new ApiResponse<List<Usuario>>
-                        (
-                        false,
-                        statusCodeNotFound,
-                        statusCodeNotFoundMessage,
-                        contextMessageNotFound,
-                        null!
-                        );
+                    return ApiResult.BadRequest<List<Usuario>>(listOfUsersBadRequest);
                 }
 
-                return new ApiResponse<List<Usuario>>
-                    (
-                    true,
-                    statusCodeOk,
-                    statusCodeMessage,
-                    contextMessageOk,
-                    listOfUsers!
-                    );
+                if (listOfUsers is null || listOfUsers.Count == 0)
+                {
+                    return ApiResult.NotFound<List<Usuario>>(listOfUsersMessageNotFound);
+                }
+
+                return ApiResult.Ok(listOfUsers, listOfUsersMessageOk);
             }
             catch (Exception error)
             {
-                var statusCodeInternalError = ResponseStatusCode.InternalError;
-                var statusCodeInternalErrorMessage = ResponseStatusCode.NotFoundMessage;
-                var contextMessageInternalError = ResponseMessage.listOfUsersFailed;
+                var listOfUsersMessageInternalError = ResponseMessage.listOfUsersFailed;
 
-                return new ApiResponse<List<Usuario>>
-                    (
-                    false,
-                    statusCodeInternalError,
-                    statusCodeInternalErrorMessage,
-                    $"Error: {error} | Unexpected error: {contextMessageInternalError}",
-                    null!
-                    );
+                return ApiResult.InternalError<List<Usuario>>(listOfUsersMessageInternalError, error);
             }
         }
     }

@@ -37,6 +37,12 @@ namespace VMT.ERP.Api.Configuration.RateLimiting
                 var fixedPolicyGuard = Guard.NotNull(fixedPolicy, fixedPolicyMessage);
                 #endregion
 
+                #region
+                var slidingPolicy = policiesOfRateLimiting.SlidingPolicy;
+                var slidingPolicyMessage = RateLimitMessage.SlidingPolicyMessage;
+                var slidingPolicyGuard = Guard.NotNull(slidingPolicy, slidingPolicyMessage);
+                #endregion
+
                 options.OnRejected = async (context, token) =>
                 {
                     context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
@@ -69,7 +75,7 @@ namespace VMT.ERP.Api.Configuration.RateLimiting
                     opt.QueueProcessingOrder = queue;
                 });
 
-                options.AddSlidingWindowLimiter(policiesOfRateLimiting.SlidingPolicy ?? throw new InvalidOperationException(), opt =>
+                options.AddSlidingWindowLimiter(slidingPolicyGuard, opt =>
                 {
                     var value = optionsOfRateLimiting.Window;
                     var permitLimit = optionsOfRateLimiting.PermitLimit;
