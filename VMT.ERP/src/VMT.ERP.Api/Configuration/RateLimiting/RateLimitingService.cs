@@ -99,19 +99,26 @@ namespace VMT.ERP.Api.Configuration.RateLimiting
 
                 options.AddConcurrencyLimiter(policiesOfRateLimiting.ConcurrencyPolicy ?? throw new InvalidOperationException(), opt =>
                 {
-                    opt.PermitLimit = optionsOfRateLimiting.PermitLimit;
-                    opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                    var permitLimit = optionsOfRateLimiting.PermitLimit;
+                    var queue = QueueProcessingOrder.OldestFirst;
+
+                    opt.PermitLimit = permitLimit;
+                    opt.QueueProcessingOrder = queue;
                 });
 
                 options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
                 {
                     var global = "Global";
+                    var permitLimit = optionsOfRateLimiting.GlobalPermitLimit;
+                    var value = optionsOfRateLimiting.Window;
+                    var time = TimeSpan.FromSeconds(value);
+                    var queue = QueueProcessingOrder.OldestFirst;
 
                     var configOfFixedWindow = new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = optionsOfRateLimiting.GlobalPermitLimit,
-                        Window = TimeSpan.FromSeconds(optionsOfRateLimiting.Window),
-                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst
+                        PermitLimit = permitLimit,
+                        Window = time,
+                        QueueProcessingOrder = queue
                     };
 
                     return RateLimitPartition.GetFixedWindowLimiter(global, partition => configOfFixedWindow);
@@ -121,25 +128,34 @@ namespace VMT.ERP.Api.Configuration.RateLimiting
                     PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
                     {
                         var userAgent = httpContext.Request.Headers.UserAgent.ToString();
+                        var permitLimit = optionsOfRateLimiting.PartitionedPermitLimit;
+                        var value = optionsOfRateLimiting.Window;
+                        var time = TimeSpan.FromMinutes(value);
+                        var queue = QueueProcessingOrder.OldestFirst;
 
                         var configOfFixedWindow = new FixedWindowRateLimiterOptions
                         {
-                            PermitLimit = optionsOfRateLimiting.PartitionedPermitLimit,
-                            Window = TimeSpan.FromMinutes(optionsOfRateLimiting.Window),
-                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst
+                            PermitLimit = permitLimit,
+                            Window = time,
+                            QueueProcessingOrder = queue
                         };
 
                         return RateLimitPartition.GetFixedWindowLimiter(userAgent, partition => configOfFixedWindow);
                     }),
+
                     PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
                     {
                         var userAgent = httpContext.Request.Headers.UserAgent.ToString();
+                        var permitLimit = optionsOfRateLimiting.GlobalPermitLimit;
+                        var value = 1;
+                        var time = TimeSpan.FromHours(value);
+                        var queue = QueueProcessingOrder.OldestFirst;
 
                         var configOfFixedWindow = new FixedWindowRateLimiterOptions
                         {
-                            PermitLimit = optionsOfRateLimiting.GlobalPermitLimit,
-                            Window = TimeSpan.FromHours(1),
-                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst
+                            PermitLimit = permitLimit,
+                            Window = time,
+                            QueueProcessingOrder = queue
                         };
 
                         return RateLimitPartition.GetFixedWindowLimiter(userAgent, partition => configOfFixedWindow);
