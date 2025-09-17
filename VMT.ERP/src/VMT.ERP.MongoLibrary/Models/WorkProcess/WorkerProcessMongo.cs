@@ -2,7 +2,7 @@
 
 namespace VMT.ERP.MongoLibrary.Models.WorkProcess
 {
-    public class WorkProcessServiceMongo
+    public class WorkerProcessMongo
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
