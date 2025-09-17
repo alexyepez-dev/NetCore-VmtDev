@@ -13,4 +13,8 @@
     <ProjectReference Include="..\VMT.ERP.Utils\VMT.ERP.Utils.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Bll\Security\Register\" />
+  </ItemGroup>
+
 </Project>
