@@ -7,15 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.19" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Security\Token\" />
+    <Folder Include="Validators\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\VMT.ERP.Common\VMT.ERP.Common.csproj" />
+    <ProjectReference Include="..\VMT.ERP.Domain\VMT.ERP.Domain.csproj" />
   </ItemGroup>
 
 </Project>
